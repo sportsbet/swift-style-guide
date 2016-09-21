@@ -165,12 +165,12 @@ func fight() {
 
 Bad:
 ```swift
-let x=y+5;
+let x=y+5
 ```
 
 Good:
 ```swift
-let x = y + 5;
+let x = y + 5
 ```
 
 <a name="formatting--newline-at-end"></a><a name="3.1.6"></a>
@@ -237,10 +237,10 @@ return baz
 Good:
 ```swift
 if (foo) {
-    return bar;
+    return bar
 }
 
-return baz;
+return baz
 ```
 
 <a name="formatting--padded-blocks"></a><a name="3.1.9"></a>
@@ -318,14 +318,14 @@ if (foo) {
 
 Bad:
 ```swift
-let foo = [ 1, 2, 3 ];
-print("\(foo[ 0 ])");
+let foo = [ 1, 2, 3 ]
+print("\(foo[ 0 ])")
 ```
 
 Good:
 ```swift
-let foo = [1, 2, 3];
-print("\(foo[ 0 ])");
+let foo = [1, 2, 3]
+print("\(foo[ 0 ])")
 ```
 
 **[🔝](#table-of-contents)**
