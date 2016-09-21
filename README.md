@@ -1,4 +1,6 @@
-# Swift Coding Standard
+# Swift Coding Standard -- WIP
+
+Note: This is a work in progress, nothing is final.
 
 ## Table of Contents
 
@@ -572,11 +574,7 @@ class Foo {
     var baz: String!
 }
 
-let foo = some.objcFunction()
-// Bad: don't force unwrap things outside of a test target.
-if foo!["test"]! {
-    bar()
-}
+
 ```
 
 Good:
@@ -591,6 +589,36 @@ guard let foo = some.objcFunction(),
 }
 if test {
     bar()
+}
+```
+
+### Force Unwrapping
+
+*Never* force unwrap values outside of a test target.
+
+Bad:
+```swift
+class Foo {
+    func bar() {
+        let foo = some.objcFunction()
+        if foo!["test"]! {
+            bar()
+        }
+    }
+}
+```
+
+Good:
+```swift
+class Foo {
+    var foo: String?
+}
+```
+
+Good:
+```swift
+class FooSpec: QuickSpec {
+    var foo: String!
 }
 ```
 
