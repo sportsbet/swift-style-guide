@@ -666,13 +666,13 @@ Bad: the type `Bool` here is obvious:
 let exists: Bool = false
 ```
 
-Bad: the type `[String: String]` is obvious because it's in the initialiser:
+Bad: the type `[String: String]` is obvious because it's in the initializer:
 ```swift
 var mapping: [String: String] = [String: String]()
 ```
 
-### [5.2](#52-use-initializers-to-specify-the-type) Use initialisers to specify the type
-Bad: using a type specifier when you could've used an initialiser:
+### [5.2](#52-use-initializers-to-specify-the-type) Use initializers to specify the type
+Bad: using a type specifier when you could've used an initializer:
 ```swift
 var mapping: [String: String] = [:]
 ```
@@ -687,7 +687,7 @@ Bad: the type specifier here is redundant:
 let shared: Model = Model()
 ```
 
-Good: using the initialiser to specify the type:
+Good: using the initializer to specify the type:
 ```swift
 var mapping = [String: String]()
 ```
