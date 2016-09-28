@@ -522,6 +522,35 @@ Good:
 typealias JSONObject = [String: AnyObject]
 ```
 
+#### [3.1.15](#3115-trailing-whitespace) Trailing whitespace
+Do not leave trailing whitespace, even leading identation on blank lines.
+
+Bad: line 5 has trailing whitespace:
+```swift
+func foo(bar: Int) -> Int {
+∙∙∙∙if bar > 0 {
+∙∙∙∙∙∙∙∙return 0
+∙∙∙∙}
+∙∙∙∙
+∙∙∙∙return 1
+}
+```
+
+Good: no trailing whitespace:
+```swift
+func foo(bar: Int) -> Int {
+∙∙∙∙if bar > 0 {
+∙∙∙∙∙∙∙∙return 0
+∙∙∙∙}
+
+∙∙∙∙return 1
+}
+```
+
+You should enable an option in Xcode to automatically filter this whitespace:
+
+![Trailing whitepsace](/images/trailing-whitespace.png)
+
 **[🔝](#table-of-contents)**
 
 ### [3.2](#32-semicolons) Semicolons
@@ -542,7 +571,7 @@ let bar = baz(qux: foo)
 
 **[🔝](#table-of-contents)**
 
-### 3.3 Dictionaries
+### 3.3 Collections
 
 #### [3.3.1](#331-always-use-shorthand-syntax) Always use shorthand syntax
 
@@ -550,16 +579,18 @@ Bad: uses the generic type specifier syntax:
 ```swift
 var foo = Dictionary<String, Double>()
 var bar = Dictionary<Dictionary<String, Double>>()
+var baz = Array<Int>()
 ```
 
 Good: uses the shorthand Swift syntax:
 ```swift
 var foo = [String: Double]()
 var bar = [String: [String: Double]]()
+var baz = [Int]
 ```
 
 #### [3.3.2](#332-newlines-in-literals) Newlines in literals
-Add newlines between elements in long dictionary literals.
+Add newlines between elements in long dictionary and array literals.
 
 Bad:
 ```swift
@@ -586,8 +617,8 @@ frobnicate(foo: ["bar": 2])
 > on a single line in 80 characters or less, you can write it inline, otherwise,
 > use newlines.
 
-#### [3.3.3](#333-indentation-in-nested-dictionaries) Indentation in nested dictionaries
-Increase indentation when using nested dictionaries.
+#### [3.3.3](#333-indentation-in-nested-collections) Indentation in nested collections
+Increase indentation when using nested collections.
 
 Bad:
 ```swift
@@ -615,21 +646,42 @@ let foo = [
 
 **[🔝](#table-of-contents)**
 
-### [3.4](#34-arrays) Arrays
+### [3.4](#34-loops) Loops
+Include a single space around the condition and binding expression in loops. 
+Do not include parentheses. Keep the opening brace on the same line, put the
+closing brace on its own line.
+
+Bad:
+```swift
+for (index in 1...5){
+    print("\(index)")
+}
+
+while (alive) {
+    fight()
+}
+```
+
+Good:
+```swift
+for index in 1...5 {
+    print("\(index)")
+}
+
+while alive {
+    fight()
+}
+```
 
 **[🔝](#table-of-contents)**
 
-### [3.5](#35-loops) Loops
+### [3.5](#35-structures--classes) Structures & Classes
 
 **[🔝](#table-of-contents)**
 
-### [3.6](#36-structures--classes) Structures & Classes
+### [3.6](#36-blocks) Blocks
 
-**[🔝](#table-of-contents)**
-
-### [3.7](#37-blocks) Blocks
-
-#### [3.7.1](#371-as-return-types) As return types
+#### [3.6.1](#361-as-return-types) As return types
 Always surround a block return type with parentheses, unless it is a Typealias.
 
 Bad:
@@ -654,8 +706,48 @@ typealias HandlerBlock = () -> Void
 func takeABlockGiveABlock(input: HandlerBlock) -> HandlerBlock
 ```
 
-## [4.](#4-naming) Naming
+## [4.](#4-naming-and-binding) Naming and Binding
 
+### [4.1](#41-let-versus-var) `let` versus `var`
+Prefer `let` over `var` wherever possible. Only use `var` if you definitely
+are mutating the value. Even if in the future you may introduce mutating logic,
+use a `let` until you actually introduce the code that does.
+
+### [4.2](#42-implicit-self) Implicit self
+Only explicitly refer to `self` when required. When accessing properties or
+methods on `self`, leave the reference to `self` implicit by default.
+
+Bad:
+```swift
+class Foo {
+    var bars: Bar
+
+    func clearBars() {
+        self.bars = []
+    }
+
+    func resetBars() {
+        self.clearBars()
+        self.bars.append(Bar())
+    }
+}
+```
+
+Good:
+```swift
+class Foo {
+    var bars: Bar
+
+    func clearBars() {
+        bars = []
+    }
+
+    func resetBars() {
+        clearBars()
+        bars.append(Bar())
+    }
+}
+```
 ## [5.](#5-type-inference) Type Inference
 
 ### [5.1](#51-obvious-types) Obvious types
@@ -736,10 +828,10 @@ do {
 If you require JSON objects which contain multiple types, consider using a
 library like SwiftyJSON, Argo or JSONCore.
 
-### [5.4](#54-fully-qualified-enum-names) Fully qualified enum names
-Do not include fully qualified enum names.
+### [5.4](#54-fully-qualified-names-and-getters) Fully qualified names and getters
+Do not include fully qualified enum names or class vars.
 
-Bad: redundant fully qualified enum name:
+Bad: redundant fully qualified names:
 ```swift
 enum FooOptions {
     case bar,
@@ -751,33 +843,107 @@ let foo = [
     FooOptions.bar,
     FooOptions.qux
 ]
+
+let america: [UIColor] = [
+    UIColor.red,
+    UIColor.white,
+    UIColor.blue
+]
 ```
 
-Good: using type inference to infer the enum:
-Note: this is a special exception to 
-[Rule 5.2](##52-use-initializers-to-specify-the-type).
+Good: using type inference to infer the containing type:
 ```swift
 let foo: [FooOptions] = [
     .bar,
     .qux
 ]
+
+let america: [UIColor] = [
+    .red,
+    .white,
+    .blue
+]
 ```
+>Note: this is a special exception to 
+[Rule 5.2](#52-use-initializers-to-specify-the-type).
 
 Bad:
-```
+```swift
 let json = try JSONSerialization.data(withJSONObject: foo,
                                       options: [JSONWritingOptions.prettyPrinted])
 ```
 
 Good:
-```
+```swift
 let json = try JSONSerialization.data(withJSONObject: foo,
                                       options: [.prettyPrinted])
+```
+
+### [5.5](#55-type-parameters) Type parameters
+Omit type parameters where possible. Methods of parameterized types can omit
+type parameters on the receiving type when they're identical to the receiver's.
+
+Bad:
+```swift
+struct Foo<T> {
+    func frobnicate(other: Foo<T>) -> Foo<T> {
+        return Foo<T>()
+    }
+}
+```
+
+Good:
+```swift
+struct Foo<T> {
+    func frobnicate(other: Foo) -> Foo {
+        return Foo()
+    }
+}
 ```
 
 ## [6.](#6-optionals) Optionals
 
 ### [6.1](#61-pyramid-of-doom) Pyramid of doom
+Use `guard`s and the "early exit" pattern to avoid creating large indentation
+levels for complex checks. Combine multiple checks into a single `guard` or
+`if let` to avoid overly verbose checks at the start of your function.
+
+Bad:
+```swift
+if let foo = maybeFoo() {
+    if foo.enabled {
+        if let baz = foo.bar?.baz() {
+            frobnicate(baz)
+        }
+    }
+}
+```
+
+Bad: these checks can be combined:
+```swift
+guard let foo = maybeFoo() else {
+    return
+}
+
+if foo.enabled {
+    guard let baz = foo.bar?.baz() else {
+        return
+    }
+
+    frobnicate(baz)
+}
+```
+
+Good:
+```swift
+guard let foo = maybeFoo(),
+    foo.enabled,
+    let baz = foo.bar?.baz() else {
+        return
+}
+
+frobnicate(baz)
+```
 
 ### [6.2](#62-implicitly-unwrapped-optionals) Implicitly unwrapped optionals
 *Never* use an implicitly unwrapped optional outside of a test target, unless
@@ -867,9 +1033,10 @@ class Foo {
 }
 
 guard let foo = some.objcFunction(),
-      let test = foo["test"] else {
-    return
+    let test = foo["test"] else {
+        return
 }
+
 if test {
     bar()
 }
