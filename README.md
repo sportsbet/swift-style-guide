@@ -528,22 +528,22 @@ Do not leave trailing whitespace, even leading identation on blank lines.
 Bad: line 5 has trailing whitespace:
 ```swift
 func foo(bar: Int) -> Int {
-⌴⌴⌴⌴if bar > 0 {
-⌴⌴⌴⌴⌴⌴⌴⌴return 0
-⌴⌴⌴⌴}
-⌴⌴⌴⌴
-⌴⌴⌴⌴return 1
+....if bar > 0 {
+........return 0
+....}
+....
+....return 1
 }
 ```
 
 Good: no trailing whitespace:
 ```swift
 func foo(bar: Int) -> Int {
-⌴⌴⌴⌴if bar > 0 {
-⌴⌴⌴⌴⌴⌴⌴⌴return 0
-⌴⌴⌴⌴}
+....if bar > 0 {
+........return 0
+....}
 
-⌴⌴⌴⌴return 1
+....return 1
 }
 ```
 
