@@ -586,7 +586,7 @@ Good: uses the shorthand Swift syntax:
 ```swift
 var foo = [String: Double]()
 var bar = [String: [String: Double]]()
-var baz = [Int]
+var baz = [Int]()
 ```
 
 #### [3.3.2](#332-newlines-in-literals) Newlines in literals
