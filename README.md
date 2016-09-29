@@ -52,6 +52,62 @@ free to create class hierarchies, but they must eventually inherit from
 
 ### [1.3](#13-when-to-use-swift) When To Use Swift
 
+#### [1.3.1](#131-language-stability) Language stability
+Swift is still an unstable language, with breaking changes happening multiple
+times per year that require significant effort to remedy. Apple does not
+typically provide good support for older versions of their tooling, so
+upgrading your Swift compiler is not really optional.
+
+This can be very expensive for large projects with very complex dependencies,
+so if you're not sure you can afford to spend considerable time multiple times
+per year rewriting code to conform to new Swift changes, you should probably
+stick to Objective-C.
+
+#### [1.3.2](#132-existing-codebases) Existing codebases
+
+
+#### [1.3.3](#133-new-teams) New teams
+If you have a new team that's unexperienced in Objective-C, and you're working
+on a brand new project, your team might have an easier time learning Swift
+than learning Objective-C.
+
+#### [1.3.4](#134-libraries) Libraries
+Unless your library's entire purpose for being is to provide fundamental
+support that only makes sense in Swift, you should consider writing your
+library in Objective-C. If you include nullability specifiers, their
+interfaces should still be relatively intuitive to a Swift programmer.
+You also guarantee the ability to be accessed by both Objective-C codebases
+and Swift codebases, whereas a Swift library will generally need to put in
+extra effort to expose an Objective-C friendly interface.
+
+Consider the advantages of an Objective-C library:
+
+* The Objective-C ABI is stable, which means you can ship binary versions of
+your library to developers and not worry about them failing to link with future
+versions of the compiler.
+* It doesn't require projects that use your library to embed the large Swift
+runtimes.
+* Objective-C libraries can be embedded frameworks *or* static libraries. Swift
+libraries must be embedded frameworks.
+
+
+#### [1.3.5](#135-c-support) C support
+While it is *possible* to interface directly with C interfaces in Swift, it is
+necessarily cumbersome since Swift is a high level language with a lot of
+safety checks, and C is a low level language with very few. C interfaces in
+Swift make heavy use of `UnsafePointer`s and can be hard enough to understand
+even *if* you are already intimiately familiar with the eccentricities of the
+specific C interface you're using.
+
+If your application will be doing a considerable amount of low level systems
+stuff, you will have a much easier time with Objective-C, which integrates with
+C seamlessly. You can also create object-oriented wrappers around your C
+interfaces using Objective-C, and then use those wrappers from Swift.
+
+#### [1.3.6](#136-c---support) C++ support
+Swift does not (yet) support C++ interfaces, so if you need to integrate with
+any C++ libraries you should stick to Objective-C++.
+
 ## [2.](#2-objective-c-interfacing) Objective-C Interfacing
 
 ## [3.](#3-formatting) Formatting
