@@ -10,12 +10,13 @@ Note: This is a work in progress, nothing is final.
 1. [Tools, Versions](#1-tools--versions)
 1. [Objective-C Interfacing](#objective-c-interfacing)
 1. [Formatting](#formatting)
-1. [Naming](#naming)
-1. [Type Inference](#typeinference)
-1. [Optionals](#optionals)
-1. [Commenting](#commenting)
-1. [Dependencies](#dependencies)
-1. [License](#license)
+1. [Naming and Binding](#4-naming-and-binding)
+1. [Type Inference](#5-type-inference)
+1. [Optionals](#6-optionals)
+1. [Errors](#7-errors)
+1. [Commenting](#8-commenting)
+1. [Dependencies](#9-dependencies)
+1. [License](#10-license)
 
 ## [1.](#1-tools-versions) Tools, Versions
 
@@ -166,7 +167,7 @@ func fight () {
 
 Good:
 ```swift
-if (isJedi) {
+if isJedi {
     fight()
 }
 ```
@@ -269,7 +270,7 @@ return baz
 
 Good:
 ```swift
-if (foo) {
+if foo {
     return bar
 }
 
@@ -290,7 +291,7 @@ function bar() {
 
 Bad:
 ```swift
-if (baz) {
+if baz {
 
     print("Wubba lubba dub dub!")
 } else {
@@ -308,7 +309,7 @@ func bar() {
 
 Good:
 ```swift
-if (baz) {
+if baz {
     print("Wubba lubba dub dub!")
 } else {
     print("Get schwifty!")
@@ -327,9 +328,8 @@ func bar( foo: Foo ) -> Foo {
 
 Bad:
 ```swift
-if ( foo ) {
-    print(foo)
-}
+let foo = ( 1,2 )
+let ( bar , baz ) = giveMeATuple()
 ```
 
 Good:
@@ -341,9 +341,8 @@ func bar(foo: Foo) -> Foo {
 
 Good:
 ```swift
-if (foo) {
-    print(foo)
-}
+let foo = (1, 2)
+let (bar, baz) = giveMeATuple()
 ```
 
 #### [3.1.10](#3110-inside-brackets) Inside brackets
@@ -646,8 +645,10 @@ let foo = [
 
 **[🔝](#table-of-contents)**
 
-### [3.4](#34-loops) Loops
-Include a single space around the condition and binding expression in loops. 
+### [3.4](#34-control-flow) Control flow
+
+#### [3.4.1](#341-parentheses) Parentheses
+Include a single space around the condition or binding expression. 
 Do not include parentheses. Keep the opening brace on the same line, put the
 closing brace on its own line.
 
@@ -660,6 +661,14 @@ for (index in 1...5){
 while (alive) {
     fight()
 }
+
+if (cond) {
+
+}
+
+switch (value) {
+
+}
 ```
 
 Good:
@@ -671,11 +680,103 @@ for index in 1...5 {
 while alive {
     fight()
 }
+
+if cond {
+
+}
+
+switch value {
+
+}
+```
+
+#### [3.4.1](#341-switch-cases) Switch cases
+Indent switch cases to align with the `switch`.
+
+#### [3.4.2](#342-fallthrough) Fallthrough
+Avoid fallthrough. Break reused logic into a function if multiple cases run
+similar logic.
+
+Bad:
+```swift
+var description = "The number \(value) is"
+switch value {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    description += " a prime number, and also"
+    fallthrough
+default:
+    description += " an integer."
+}
+```
+
+Good, if a little contrived:
+```swift
+switch value {
+case 2, 3, 5, 7, 11, 13, 17, 19:
+    return numberDescription(prime: true)
+default:
+    return numberDescription(prime: false)
+}
+
+func numberDescription(prime: Bool) -> String {
+    if prime {
+        return "The number \(value) is a prime number, and also an integer"
+    } else {
+        return "The number \(value) is an integer"
+    }
+}
 ```
 
 **[🔝](#table-of-contents)**
 
 ### [3.5](#35-structures--classes) Structures & Classes
+
+#### [3.5.1](#351-properties--Methods) Properties & Methods
+Arrange properties and methods in the following order:
+
+1. Public structures (such as enums, structs, inner classes)
+1. Public constants (let)
+1. Public properties (var)
+1. Public derived properties (get/set)
+1. Public methods
+1. Internal structures (such as enums, structs, inner classes)
+1. Internal constants (let)
+1. Internal properties (var)
+1. Internal derived properties (get/set)
+1. Internal methods
+1. Private structures (such as enums, structs, inner classes)
+1. Private constants (let)
+1. Private properties (var)
+1. Private derived properties (get/set)
+1. Private methods
+
+#### [3.5.2](#352-extensions) Extensions
+Break a large class or struct that conforms to many protocols into extensions
+that each focus on their specific conformance, if possible.
+
+```swift
+struct Foo: Fooable, Barable, CustomFooFrobnicatable {
+    // ...
+}
+```
+
+```swift
+struct Foo {
+    // ...
+}
+
+extension Foo: Fooable {
+    // ...
+}
+
+extension Foo: Barable {
+    // ...
+}
+
+extension Foo: CustomFooFrobnicatable {
+    // ...
+}
+```
 
 **[🔝](#table-of-contents)**
 
@@ -1042,13 +1143,16 @@ if test {
 }
 ```
 
-## [7.](#errors) Errors
+## [7.](#7-errors) Errors
 
-## [8.](#commenting) Commenting
+## [8.](#8-commenting) Commenting
 
-## [9.](#dependencies) Dependencies
+## [9.](#9-dependencies) Dependencies
 
-## License
+## [10.](#10-license) License
+
+This *document* is licensed under the MIT license. You are free to pick
+whichever license you want for your source code.
 
 (The MIT License)
 
