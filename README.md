@@ -64,7 +64,17 @@ per year rewriting code to conform to new Swift changes, you should probably
 stick to Objective-C.
 
 #### [1.3.2](#132-existing-codebases) Existing codebases
+If you have a large existing Objective-C application, there can be some
+opportunities to write newer classes in Swift depending on your application
+architecture. The Objective-C compatible interfaces in Swift limit your
+ability to use convenient Swift constructs like enums and structs, so
+deliberate design will be required if you make use of these features to
+ensure the remaining Objective-C code can leverage the new work.
 
+Very large, complicated codebases built by large, disparate teams may struggle
+to integrate new Swift code with an older Objective-C codebase, so in these
+cases it may be best to wait for a replatforming strategy rather than shoe-horn
+Swift code in without a well-defined migration plan.
 
 #### [1.3.3](#133-new-teams) New teams
 If you have a new team that's unexperienced in Objective-C, and you're working
@@ -793,17 +803,17 @@ Arrange properties and methods in the following order:
 1. Public structures (such as enums, structs, inner classes)
 1. Public constants (let)
 1. Public properties (var)
-1. Public derived properties (get/set)
+1. Public computed properties (get/set)
 1. Public methods
 1. Internal structures (such as enums, structs, inner classes)
 1. Internal constants (let)
 1. Internal properties (var)
-1. Internal derived properties (get/set)
+1. Internal computed properties (get/set)
 1. Internal methods
 1. Private structures (such as enums, structs, inner classes)
 1. Private constants (let)
 1. Private properties (var)
-1. Private derived properties (get/set)
+1. Private computed properties (get/set)
 1. Private methods
 
 #### [3.5.2](#352-extensions) Extensions
@@ -831,6 +841,40 @@ extension Foo: Barable {
 
 extension Foo: CustomFooFrobnicatable {
     // ...
+}
+```
+
+#### [3.5.3](#353-implicit-getters) Implicit getters
+When possible, omit the `get` keyword on read-only computed properties and
+read-only subscripts.
+
+Bad:
+```swift
+class Foo {
+    var bar {
+        get {
+            return 42
+        }
+    }
+
+    subscript(index: Int) -> Int {
+        get {
+            return index + 42
+        }
+    }
+}
+```
+
+Good:
+```swift
+class Foo {
+    var bar {
+        return 42
+    }
+
+    subscript(index: Int) -> Int {
+        return index + 42
+    }
 }
 ```
 
@@ -905,6 +949,13 @@ class Foo {
     }
 }
 ```
+
+### [4.3](#43-final-by-default) `final` by default
+Classes should start as `final`, and only be changed to allow subclassing if
+a valid need for inheritance has been identified. Even in that case, as many
+definitions as possible *within* the class should be `final` as well, following
+the same rules.
+
 ## [5.](#5-type-inference) Type Inference
 
 ### [5.1](#51-obvious-types) Obvious types
