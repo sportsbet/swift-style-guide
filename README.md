@@ -851,7 +851,7 @@ read-only subscripts.
 Bad:
 ```swift
 class Foo {
-    var bar {
+    var bar: Int {
         get {
             return 42
         }
@@ -868,7 +868,7 @@ class Foo {
 Good:
 ```swift
 class Foo {
-    var bar {
+    var bar: Int {
         return 42
     }
 
